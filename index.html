@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* 设置表单样式 */
+        form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        /* 设置输入框样式 */
+        input[type="text"] {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            margin-right: 10px;
+            flex: 1;
+            font-size: 16px;
+        }
+
+        /* 设置按钮样式 */
+        button {
+            background-color: #0077cc;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #005fa3;
+        }
+    </style>
+</head>
+
+<body>
+    <div>这个界面可以实现多个浏览器标签页自动消息推送，当你发送消息，其他的http://127.0.0.1:3000/不需要刷新也会更新</div>
+    <form action="">
+        <input type="text">
+        <button>发送</button>
+    </form>
+    <ul></ul>
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const form = document.querySelector('form');
+        const input = form.querySelector('input');
+        const ul = document.querySelector('ul');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (input.value) {
+                socket.emit('chat message', input.value);
+                input.value = '';
+            }
+        })
+        socket.on('chat message', (msg) => {
+            const li = document.createElement('li');
+            li.textContent = msg;
+            ul.appendChild(li);
+            window.scrollTo(0, document.body.scrollHeight);
+        })
+    </script>
+</body>
+
+</html>
